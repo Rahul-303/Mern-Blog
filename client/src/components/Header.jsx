@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <Navbar className='border-b-2'>
         <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold'>
-            <span className='px-2 py-1 bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 rounded-lg text-white'>Rahul's</span>Blog
+            <span className='px-2 py-1 bg-gradient-to-r from-green-400 via-cyan-600 to-blue-500 rounded-lg text-white'>Rahul's</span>Blog
         </Link>
         <form>
             <TextInput
@@ -27,7 +27,7 @@ const Header = () => {
             <FaMoon />
         </Button>
         <Link to='/sign-in'>
-            <Button gradientDuoTone='greenToBlue'>
+            <Button gradientDuoTone='greenToBlue' outline>
                 Sign In
             </Button>
         </Link>

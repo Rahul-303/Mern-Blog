@@ -1,7 +1,10 @@
-const express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import userRoutes from './routes/user.route.js'
+
 const app = express();
-const mongoose = require('mongoose');
-require('dotenv').config();
+dotenv.config();
 const port = 3000;
 const url = process.env.MONGO;
 
@@ -17,3 +20,5 @@ mongoose
 app.listen(port, ()=>{
     console.log(`server listening at ${port}!`);
 })
+
+app.use('/api/user', userRoutes);

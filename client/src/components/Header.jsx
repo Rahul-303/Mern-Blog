@@ -8,7 +8,7 @@ const Header = () => {
     const path = useLocation().pathname;
   return (
     <Navbar className='border-b-2'>
-        <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold'>
+        <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
             <span className='px-2 py-1 bg-gradient-to-r from-green-400 via-cyan-600 to-blue-500 rounded-lg text-white'>Rahul's</span>Blog
         </Link>
         <form>

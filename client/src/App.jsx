@@ -1,5 +1,7 @@
 import React from 'react';
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
+import "react-toastify/dist/ReactToastify.css";
+import {ToastContainer} from 'react-toastify';
 import Home from './pages/Home';
 import About from './pages/About';
 import SignUp from './pages/SignUp';
@@ -20,7 +22,19 @@ const App = () => {
       <Route path='/sign-up' element = {<SignUp/>}/>
       <Route path='/projects' element = {<Projects/>}/>
     </Routes>
+    <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </BrowserRouter>
+    
   )
 }
 

@@ -33,6 +33,7 @@ const SignUp = () => {
         formData,
         config
       );
+      //setFormData({});
       toast.success(res.data.message);
       navigate("/sign-in");
       setLoading(false);

@@ -5,13 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../server";
 import { toast } from "react-toastify";
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {loading, error: errorMessage} = useSelector(state => state.user)
 
   const HandleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -20,14 +22,13 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      return setErrorMessage("Please fill out all the fields!");
+      dispatch(signInFailure("Please fill out all the fields!"));
     }
     const config = {
       headers: { "Contet-Type": "application/json" },
     };
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart());
       const res = await axios.post(
         `${server}/api/auth/signin`,
         formData,
@@ -36,10 +37,9 @@ const SignIn = () => {
       //setFormData({});
       toast.success(res.data.message);
       navigate("/");
-      setLoading(false);
+      dispatch(signInSuccess(res.data));
     } catch (error) {
-      setErrorMessage(error.response.data.message);
-      setLoading(false);
+      dispatch(signInFailure(error.response.data.message));
     }
   };
 
@@ -61,15 +61,6 @@ const SignIn = () => {
         {/* right */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            {/* <div>
-              <Label value="your username" />
-              <TextInput
-                type="text"
-                placeholder="username"
-                id="username"
-                onChange={HandleChange}
-              />
-            </div> */}
             <div>
               <Label value="your email" />
               <TextInput

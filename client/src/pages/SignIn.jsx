@@ -1,11 +1,23 @@
-import { Alert, Button, Label, FloatingLabel, Spinner, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Label,
+  FloatingLabel,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../server";
 import { toast } from "react-toastify";
-import { signInStart, signInSuccess, signInFailure, signInStop } from "../redux/user/userSlice";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  signInStop,
+} from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
 
@@ -14,7 +26,7 @@ const SignIn = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {loading, error: errorMessage} = useSelector(state => state.user)
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
 
   const HandleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -62,18 +74,26 @@ const SignIn = () => {
         {/* right */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div>
-            <FloatingLabel variant="outlined" label="your email"  type="email"
-                id="email"
-                onChange={HandleChange} />
-            </div>
+              <div className="mt-1 relative">
+                <FloatingLabel
+                  variant="outlined"
+                  label="your email"
+                  type="email"
+                  id="email"
+                  onChange={HandleChange}
+                />
+              </div>
             <div>
               <div className="mt-1 relative">
-              <FloatingLabel  variant="outlined" label="your password"  type={visible ? "text" : "password"}
+                <FloatingLabel
+                  className="text-md"
+                  variant="outlined"
+                  label="your password"
+                  type={visible ? "text" : "password"}
                   id="password"
-                  onChange={HandleChange}/>
-                {
-                visible ? (
+                  onChange={HandleChange}
+                />
+                {visible ? (
                   <AiOutlineEye
                     className="absolute right-2 top-2 cursor-pointer"
                     size={25}
@@ -85,8 +105,7 @@ const SignIn = () => {
                     size={25}
                     onClick={() => setVisible(true)}
                   />
-                )
-              }
+                )}
               </div>
             </div>
             <Button

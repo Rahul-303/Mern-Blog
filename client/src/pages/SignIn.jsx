@@ -1,4 +1,4 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Alert, Button, Label, FloatingLabel, Spinner, TextInput } from "flowbite-react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -63,23 +63,15 @@ const SignIn = () => {
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
-              <Label value="your email" />
-              <TextInput
-                type="email"
-                placeholder="name@email.com"
+            <FloatingLabel variant="outlined" label="your email"  type="email"
                 id="email"
-                onChange={HandleChange}
-              />
+                onChange={HandleChange} />
             </div>
             <div>
-              <Label value="your password" />
               <div className="mt-1 relative">
-                <TextInput
-                  type={visible ? "text" : "password"}
-                  placeholder="*******"
+              <FloatingLabel  variant="outlined" label="your password"  type={visible ? "text" : "password"}
                   id="password"
-                  onChange={HandleChange}
-                />
+                  onChange={HandleChange}/>
                 {
                 visible ? (
                   <AiOutlineEye

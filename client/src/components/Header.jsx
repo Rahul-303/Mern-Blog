@@ -1,11 +1,34 @@
 import React from "react";
-import { Button, Navbar, NavbarCollapse, TextInput } from "flowbite-react";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Navbar,
+  NavbarCollapse,
+  TextInput,
+} from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { signOutSuccess } from "../redux/user/userSlice";
+import axios from "axios";
+import { server } from "../server";
+import { useDispatch } from "react-redux";
 
 const Header = () => {
+  const dispatch = useDispatch()
+  const handleSignOut = async(e) =>{
+    e.preventDefault();
+    try{
+      const res = await axios.post(`${server}/api/user/signout`);
+      dispatch(signOutSuccess());
+    }catch(error){
+      console.log(error);
+    }
+  }
   const path = useLocation().pathname;
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <Navbar className="border-b-2">
       <Link
@@ -32,11 +55,45 @@ const Header = () => {
         <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
           <FaMoon />
         </Button>
-        <Link to="/sign-in">
-          <Button gradientDuoTone="greenToBlue" outline>
-            Sign In
-          </Button>
-        </Link>
+        {currentUser ? (
+          <>
+            <Dropdown
+              inline
+              arrowIcon={false}
+              label={
+                <Avatar
+                  alt="user"
+                  img={currentUser.profilePicture}
+                  rounded
+                ></Avatar>
+              }
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">@{currentUser.username}</span>
+                <span className="block text-sm font-medium truncate">
+                  {currentUser.email}
+                </span>
+              </Dropdown.Header>
+              <Dropdown.Header>
+                <Link to="/dashboard">
+                  <Dropdown.Item>Profile</Dropdown.Item>
+                </Link>
+              </Dropdown.Header>
+              <Dropdown.Divider></Dropdown.Divider>
+              <Dropdown.Header>
+                <Button gradientDuoTone="greenToBlue" outline onClick={handleSignOut}>
+                  sign out
+                </Button>
+              </Dropdown.Header>
+            </Dropdown>
+          </>
+        ) : (
+          <Link to="/sign-in">
+            <Button gradientDuoTone="greenToBlue" outline>
+              Sign In
+            </Button>
+          </Link>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>

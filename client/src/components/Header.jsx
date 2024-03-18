@@ -21,17 +21,17 @@ import { toggleTheme } from "../redux/theme/themeSlice";
 const Header = () => {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
-  const {theme} = useSelector(state => state.theme);
+  const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
-  const handleSignOut = async(e) =>{
+  const handleSignOut = async (e) => {
     e.preventDefault();
-    try{
+    try {
       const res = await axios.post(`${server}/api/user/signout`);
       dispatch(signOutSuccess());
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <Navbar className="border-b-2">
       <Link
@@ -55,8 +55,13 @@ const Header = () => {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 hidden sm:inline" color="gray" pill onClick={()=>dispatch(toggleTheme())}>
-          {theme === 'light' ? <FaMoon/>: <FaSun/> }
+        <Button
+          className="w-12 h-10 hidden sm:inline"
+          color="gray"
+          pill
+          onClick={() => dispatch(toggleTheme())}
+        >
+          {theme === "light" ? <FaMoon /> : <FaSun />}
         </Button>
         {currentUser ? (
           <>
@@ -84,7 +89,11 @@ const Header = () => {
               </Dropdown.Header>
               <Dropdown.Divider></Dropdown.Divider>
               <Dropdown.Header>
-                <Button gradientDuoTone="greenToBlue" outline onClick={handleSignOut}>
+                <Button
+                  gradientDuoTone="greenToBlue"
+                  outline
+                  onClick={handleSignOut}
+                >
                   sign out
                 </Button>
               </Dropdown.Header>

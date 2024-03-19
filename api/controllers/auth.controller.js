@@ -16,7 +16,20 @@ export const signup = async (req, res, next) => {
   ) {
     next(errorHandler(400, "All fields are required!"));
   }
-
+  if(req.body.password){
+    if(req.body.password.length < 6){
+      return next(errorHandler(400, 'password must be at least 6 characters'));
+    }
+  }
+    if(req.body.username){
+      if(req.body.username.length < 7 || req.body.username.length > 20){
+        return next(errorHandler(400, 'username must be between 7 and 20 characters'))
+      }
+      if(!req.body.username.match(/^[a-zA-Z0-9]+$/)){
+        return next(errorHandler(400, 'username can only contains letters and numbers'))
+      }
+    }
+  
   const userEmail = await User.findOne({ email });
   if (userEmail) {
     return next(errorHandler(400, "User already exist!"));

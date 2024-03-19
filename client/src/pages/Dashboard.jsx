@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Profile from "../components/Profile";
+import Profile from '../components/Profile';
 import DashSidebar from "../components/DashSidebar";
 
 const Dashboard = () => {

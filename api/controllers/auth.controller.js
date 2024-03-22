@@ -16,20 +16,24 @@ export const signup = async (req, res, next) => {
   ) {
     next(errorHandler(400, "All fields are required!"));
   }
-  if(req.body.password){
-    if(req.body.password.length < 6){
-      return next(errorHandler(400, 'password must be at least 6 characters'));
+  if (req.body.password) {
+    if (req.body.password.length < 6) {
+      return next(errorHandler(400, "password must be at least 6 characters"));
     }
   }
-    if(req.body.username){
-      if(req.body.username.length < 7 || req.body.username.length > 20){
-        return next(errorHandler(400, 'username must be between 7 and 20 characters'))
-      }
-      if(!req.body.username.match(/^[a-zA-Z0-9]+$/)){
-        return next(errorHandler(400, 'username can only contains letters and numbers'))
-      }
+  if (req.body.username) {
+    if (req.body.username.length < 7 || req.body.username.length > 20) {
+      return next(
+        errorHandler(400, "username must be between 7 and 20 characters")
+      );
     }
-  
+    if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+      return next(
+        errorHandler(400, "username can only contains letters and numbers")
+      );
+    }
+  }
+
   const userEmail = await User.findOne({ email });
   if (userEmail) {
     return next(errorHandler(400, "User already exist!"));
@@ -69,13 +73,13 @@ export const signin = async (req, res, next) => {
     }
 
     const { password: pass, ...rest } = validUser._doc;
-    const expiryDate = new Date(Date.now() + 3600000);
+    const expiryDate = new Date(Date.now() + 3600000 * 24);
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
     res
       .status(200)
       .cookie("access_token", token, {
         httpOnly: true,
-        expires: expiryDate
+        expires: expiryDate,
       })
       .json({ ...rest, message: "sign in was successful!" });
   } catch (error) {
@@ -99,7 +103,7 @@ export const google = async (req, res, next) => {
     } else {
       const generatedPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
-      const expiryDate = new Date(Date.now() + 3600000);
+      const expiryDate = new Date(Date.now() + 3600000 * 24);
       const newUser = new User({
         username,
         email,
@@ -113,9 +117,9 @@ export const google = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          expires: expiryDate
+          expires: expiryDate,
         })
-        .json({...rest, message: "sign up using google was successfull!" });
+        .json({ ...rest, message: "sign up using google was successfull!" });
     }
   } catch (error) {
     next(error);

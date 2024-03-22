@@ -1,4 +1,4 @@
-import { Button, TextInput } from "flowbite-react";
+import { Button, TextInput,Spinner, Modal } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -14,9 +14,13 @@ import {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import {HiOutlineExclamationCircle} from 'react-icons/hi'
 
 const Profile = () => {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -28,6 +32,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUser, setUpdateUser] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
 
@@ -92,7 +97,7 @@ const Profile = () => {
     };
     try {
       dispatch(updateStart());
-      const res = await axios.post(`/api/user/update/${currentUser._id}`, formData, config);
+      const res = await axios.put(`/api/user/update/${currentUser._id}`, formData, config);
       dispatch(updateSuccess(res.data));
       setUpdateUser(true);
     } catch (error) {
@@ -101,6 +106,17 @@ const Profile = () => {
       setUpdateUser(false);
     }
   };
+
+  const handleDeleteUser= async()=>{
+    setShowModal(false);
+    try{
+      dispatch(deleteUserStart());
+      const res = await axios.delete(`/api/user/delete/${currentUser._id}`)
+      dispatch(deleteUserSuccess(res.data));
+    }catch(error){
+      dispatch(deleteUserFailure(error.response.data.message))
+    }
+  }
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
@@ -170,14 +186,21 @@ const Profile = () => {
           defaultValue={currentUser.email}
           onChange={handleInputChange}
         />
-        {/* <TextInput
+        <TextInput
           type="passord"
           id="password"
           placeholder="password"
           onChange={handleInputChange}
-        /> */}
-        <Button type="submit" gradientDuoTone="greenToBlue" outline>
-          Update
+        />
+        <Button type="submit" gradientDuoTone="greenToBlue" outline disabled={loading}>
+        {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Updating...</span>
+                </>
+              ) : (
+                "Update"
+              )}
         </Button>
         <div className="text-sm self-center"><p className="text-red-700 mt-5">{error &&(<>
           {error}
@@ -187,9 +210,41 @@ const Profile = () => {
       </div>
       </form>
       <div className="text-red-500 flex justify-between mt-5">
-        <span className="cursor-pointer">Delete Account</span>
+        <span className="cursor-pointer" onClick={() => setShowModal(true)}>Delete Account</span>
         <span className="cursor-pointer">Sign out</span>
       </div>
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size='md'
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className='text-center'>
+            <HiOutlineExclamationCircle className='h-14 w-14 text-red-500 dark:text-red-700 mb-4 mx-auto' />
+            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+              Are you sure you want to delete your account?
+            </h3>
+            <div className='flex justify-center gap-4'>
+              <Button gradientDuoTone='greenToBlue' outline onClick={handleDeleteUser} disabled={loading}>
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Deleting...</span>
+                </>
+              ) : (
+                "Yes, I'm sure"
+              )}
+              </Button>
+              
+              <Button gradientDuoTone='greenToBlue' onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

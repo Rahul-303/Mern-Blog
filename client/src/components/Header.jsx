@@ -83,7 +83,7 @@ const Header = () => {
                 </span>
               </Dropdown.Header>
               <Dropdown.Header>
-                <Link to="/dashboard">
+                <Link to="/dashboard?tab=profile">
                   <Dropdown.Item>Profile</Dropdown.Item>
                 </Link>
               </Dropdown.Header>

@@ -170,12 +170,12 @@ const Profile = () => {
           defaultValue={currentUser.email}
           onChange={handleInputChange}
         />
-        <TextInput
+        {/* <TextInput
           type="passord"
           id="password"
           placeholder="password"
           onChange={handleInputChange}
-        />
+        /> */}
         <Button type="submit" gradientDuoTone="greenToBlue" outline>
           Update
         </Button>

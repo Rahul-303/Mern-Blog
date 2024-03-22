@@ -10,7 +10,6 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { server } from "../server";
 import { toast } from "react-toastify";
 import {
   signInStart,
@@ -43,7 +42,7 @@ const SignIn = () => {
     try {
       dispatch(signInStart());
       const res = await axios.post(
-        `${server}/api/auth/signin`,
+        `/api/auth/signin`,
         formData,
         config
       );

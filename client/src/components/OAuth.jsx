@@ -5,14 +5,12 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { server } from "../server";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   signInStart,
   signInSuccess,
   signInFailure,
-  signInStop,
 } from "../redux/user/userSlice";
 
 const OAuth = () => {
@@ -36,7 +34,7 @@ const OAuth = () => {
       };
       console.log(newUser);
       const res = await axios.post(
-        `${server}/api/auth/google`,
+        `/api/auth/google`,
         newUser,
         config
       );

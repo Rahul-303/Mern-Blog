@@ -3,12 +3,17 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
-import cors from "cors";
+// import cors from "cors";
 import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+//   credentials: true, //access-control-allow-credentials:true
+//   optionSuccessStatus: 200,
+// };
+// app.use(cors(corsOptions));
 app.use(cookieParser());
 dotenv.config();
 

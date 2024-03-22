@@ -14,7 +14,7 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { signOutSuccess } from "../redux/user/userSlice";
 import axios from "axios";
-import { server } from "../server";
+//import { server } from "../server";
 import { useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
 
@@ -26,7 +26,7 @@ const Header = () => {
   const handleSignOut = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${server}/api/user/signout`);
+      const res = await axios.post(`/api/user/signout`);
       dispatch(signOutSuccess());
     } catch (error) {
       console.log(error);

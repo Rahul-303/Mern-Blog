@@ -16,11 +16,10 @@ import {
   updateFailure,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import axios from 'axios';
-import {server} from '../server'
+import axios from "axios";
 
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadingProgress, setImageFileUploadingProgress] =
@@ -28,6 +27,7 @@ const Profile = () => {
   const [imageUploadError, setImageUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUser, setUpdateUser] = useState(false);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
 
@@ -52,6 +52,7 @@ const Profile = () => {
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -84,15 +85,20 @@ const Profile = () => {
     if (Object.keys(formData).length === 0) {
       return;
     }
+    
     const config = {
-      headers: { "Contet-Type": "application/json" },
-    }
-    try{
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" },
+    };
+    try {
       dispatch(updateStart());
-      const res = await axios.put(`${server}/api/user/update/${currentUser._id}`, formData, config);
+      const res = await axios.post(`/api/user/update/${currentUser._id}`, formData, config);
       dispatch(updateSuccess(res.data));
-    }catch(error){
-      dispatch(updateFailure(error))
+      setUpdateUser(true);
+    } catch (error) {
+      dispatch(updateFailure(error.response.data.message));
+      console.log(error);
+      setUpdateUser(false);
     }
   };
   return (
@@ -173,6 +179,12 @@ const Profile = () => {
         <Button type="submit" gradientDuoTone="greenToBlue" outline>
           Update
         </Button>
+        <div className="text-sm self-center"><p className="text-red-700 mt-5">{error &&(<>
+          {error}
+        </>) }
+        </p>
+        <p className="text-green-700">{updateUser && 'User was updated successfully!'}</p>
+      </div>
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span className="cursor-pointer">Delete Account</span>

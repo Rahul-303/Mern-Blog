@@ -1,6 +1,6 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -12,6 +12,21 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const usernameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleKeyPress1 = (event) => {
+    if (event.key === 'Enter') {
+      emailRef.current.focus();
+    }
+  };
+
+  const handleKeyPress2 = (event) => {
+    if (event.key === 'Enter') {
+      passwordRef.current.focus();
+    }
+  };
 
   const HandleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -68,6 +83,9 @@ const SignUp = () => {
                 placeholder="username"
                 id="username"
                 onChange={HandleChange}
+                autoFocus
+                onKeyDown={handleKeyPress1}
+                ref={usernameRef}
               />
             </div>
             <div>
@@ -77,6 +95,8 @@ const SignUp = () => {
                 placeholder="name@email.com"
                 id="email"
                 onChange={HandleChange}
+                onKeyDown={handleKeyPress2}
+                ref={emailRef}
               />
             </div>
             <div>
@@ -87,6 +107,7 @@ const SignUp = () => {
                   placeholder="*******"
                   id="password"
                   onChange={HandleChange}
+                  ref={passwordRef}
                 />
                 {
                 visible ? (
@@ -127,11 +148,9 @@ const SignUp = () => {
               Sign In
             </Link>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
+          <div className="text-md self-center">
+            <p className="text-red-700 mt-5">{errorMessage && <>{errorMessage}</>}</p>
+          </div>
         </div>
       </div>
     </div>

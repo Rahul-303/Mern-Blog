@@ -1,13 +1,10 @@
 import {
-  Alert,
   Button,
-  Label,
   FloatingLabel,
   Spinner,
-  TextInput,
 } from "flowbite-react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -15,7 +12,6 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-  signInStop,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
@@ -25,7 +21,15 @@ const SignIn = () => {
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      passwordRef.current.focus();
+    }
+  };
 
   const HandleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -41,11 +45,7 @@ const SignIn = () => {
     };
     try {
       dispatch(signInStart());
-      const res = await axios.post(
-        `/api/auth/signin`,
-        formData,
-        config
-      );
+      const res = await axios.post(`/api/auth/signin`, formData, config);
       //setFormData({});
       toast.success(res.data.message);
       navigate("/");
@@ -73,15 +73,18 @@ const SignIn = () => {
         {/* right */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-              <div className="mt-1 relative">
-                <FloatingLabel
-                  variant="outlined"
-                  label="your email"
-                  type="email"
-                  id="email"
-                  onChange={HandleChange}
-                />
-              </div>
+            <div className="mt-1 relative">
+              <FloatingLabel
+                variant="outlined"
+                label="your email"
+                type="email"
+                id="email"
+                onChange={HandleChange}
+                autoFocus
+                onKeyDown={handleKeyPress}
+                ref={emailRef}
+              />
+            </div>
             <div>
               <div className="mt-1 relative">
                 <FloatingLabel
@@ -91,6 +94,7 @@ const SignIn = () => {
                   type={visible ? "text" : "password"}
                   id="password"
                   onChange={HandleChange}
+                  ref={passwordRef}
                 />
                 {visible ? (
                   <AiOutlineEye
@@ -129,11 +133,9 @@ const SignIn = () => {
               Sign Up
             </Link>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
+          <div className="text-md self-center">
+            <p className="text-red-700 mt-5">{error && <>{error}</>}</p>
+          </div>
         </div>
       </div>
     </div>

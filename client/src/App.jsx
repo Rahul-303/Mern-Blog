@@ -12,6 +12,8 @@ import Header from "./components/Header";
 import FooterCom from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
+import PrivateRouteCreator from "./components/PrivateRouteCreator";
+import CreatePost from "./pages/CreatePost";
 
 const App = () => {
 
@@ -25,6 +27,9 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<PrivateRouteCreator />}>
+          <Route path="/create-post" element={<CreatePost />} />
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />

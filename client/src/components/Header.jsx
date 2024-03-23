@@ -90,7 +90,7 @@ const Header = () => {
               <Dropdown.Divider></Dropdown.Divider>
               <Dropdown.Header>
                 <Button
-                  gradientDuoTone="greenToBlue"
+                  gradientDuoTone="purpleToBlue"
                   outline
                   onClick={handleSignOut}
                 >
@@ -101,7 +101,7 @@ const Header = () => {
           </>
         ) : (
           <Link to="/sign-in">
-            <Button gradientDuoTone="greenToBlue" outline>
+            <Button gradientDuoTone="purpleToBlue" outline>
               Sign In
             </Button>
           </Link>

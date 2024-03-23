@@ -22,6 +22,7 @@ import {
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import {Link} from 'react-router-dom';
 
 const Profile = () => {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -209,9 +210,9 @@ const Profile = () => {
         />
         <Button
           type="submit"
-          gradientDuoTone="greenToBlue"
+          gradientDuoTone='greenToBlue' 
           outline
-          disabled={loading}
+          disabled={loading || !imageFileUploadingProgress === 100}
         >
           {loading ? (
             <>
@@ -222,6 +223,13 @@ const Profile = () => {
             "Update"
           )}
         </Button>
+        {currentUser.isCreator && (
+          <Link to='/create-post'>
+          <Button type="button" gradientDuoTone='purpleToBlue' className="w-full">
+            create a post
+          </Button>
+          </Link>
+        )}
         <div className="text-sm self-center">
           <p className="text-red-700 mt-5">{error && <>{error}</>}</p>
           <p className="text-green-700">
@@ -250,7 +258,7 @@ const Profile = () => {
             </h3>
             <div className="flex justify-center gap-4">
               <Button
-                gradientDuoTone="greenToBlue"
+                gradientDuoTone="purpleToBlue"
                 outline
                 onClick={handleDeleteUser}
                 disabled={loading}

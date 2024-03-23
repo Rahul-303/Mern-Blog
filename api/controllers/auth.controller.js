@@ -74,7 +74,7 @@ export const signin = async (req, res, next) => {
 
     const { password: pass, ...rest } = validUser._doc;
     const expiryDate = new Date(Date.now() + 3600000 * 24);
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign({ id: validUser._id, isCreator: validUser.isCreator }, process.env.JWT_SECRET_KEY);
     res
       .status(200)
       .cookie("access_token", token, {
@@ -92,7 +92,7 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign({ id: user._id, isCreator: user.isCreator }, process.env.JWT_SECRET_KEY);
       const { password: pass, ...rest } = user._doc;
       res
         .status(200)
@@ -111,7 +111,7 @@ export const google = async (req, res, next) => {
         profilePicture: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign({ id: newUser._id, isCreator: newUser.isCreator }, process.env.JWT_SECRET_KEY);
       const { password: pass, ...rest } = newUser._doc;
       res
         .status(200)

@@ -11,8 +11,12 @@ import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import FooterCom from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
+import { useSelector } from "react-redux";
 
 const App = () => {
+
+  const {theme} = useSelector(state => state.theme);
+
   return (
     <BrowserRouter>
       <Header />
@@ -35,7 +39,7 @@ const App = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme= {theme === 'dark' ? 'dark' : "light"}
       />
       <FooterCom />
     </BrowserRouter>

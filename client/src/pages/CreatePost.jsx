@@ -4,26 +4,30 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Button, FileInput, Select, TextInput } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import { Button, FileInput, Select, Spinner, TextInput } from "flowbite-react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [noImageError, setNoImageError] = useState(false);
   const [imageProgress, setImageProgress] = useState(null);
   const [formData, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  console.log(formData);
   const handleImageInput = (e) => {
     const imageFile = e.target.files[0];
     setFile(imageFile);
-    setImageUrl(URL.createObjectURL(imageFile));
   };
 
   const handleImageUpload = () => {
@@ -63,10 +67,32 @@ const CreatePost = () => {
       console.log(error);
     }
   };
+
+  const handlePublish = async (e) => {
+    setLoading(true);
+    setPublishError(null);
+    e.preventDefault();
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const res = await axios.post("/api/post/create", formData, config);
+      console.log(res);
+      setLoading(false);
+      navigate(`/post/${res.data.slug}`);
+    } catch (error) {
+      setPublishError(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">Create a Post</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handlePublish}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -74,8 +100,16 @@ const CreatePost = () => {
             required
             id="title"
             className="flex-1"
+            onChange={(e) =>
+              setFormData({ ...formData, [e.target.id]: e.target.value })
+            }
           />
-          <Select>
+          <Select
+            id="category"
+            onChange={(e) =>
+              setFormData({ ...formData, [e.target.id]: e.target.value })
+            }
+          >
             <option value="uncategorized"> Select a Category</option>
             <option value="javascript">JavaScript</option>
             <option value="reactjs">React.Js</option>
@@ -105,16 +139,20 @@ const CreatePost = () => {
             )}
           </Button>
         </div>
-        {noImageError ? (
-        <span className="text-red-700">Please select an image to upload</span>
-        ) : ''}
-        {
-          imageError ? (
+        <div className="self-center">
+          {noImageError ? (
+            <span className="text-red-700">
+              Please select an image to upload
+            </span>
+          ) : (
+            ""
+          )}
+          {imageError ? (
             <span className="text-red-700">Something went wrong!</span>
           ) : (
-          ""
-        )
-        }
+            ""
+          )}
+        </div>
         {formData.image && (
           <img
             src={formData.image}
@@ -127,9 +165,19 @@ const CreatePost = () => {
           placeholder="write something here..."
           className="h-72 mb-12"
           required
+          onChange={(value) => setFormData({ ...formData, content: value })}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue">
-          Publish
+        <div className="self-center">
+        {publishError && <span className="text-red-700">{publishError}</span>}
+        </div>
+        <Button type="submit" gradientDuoTone="purpleToBlue" disabled={loading}>
+          {loading ?(
+            <>
+              <Spinner size="sm" />
+              <span className="pl-3">Publishing...</span>
+            </>
+          )
+          : 'Publish'}
         </Button>
       </form>
     </div>

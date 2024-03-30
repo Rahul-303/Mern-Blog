@@ -10,19 +10,21 @@ const DashPosts = () => {
   const [showMore, setShowMore] = useState(true);
   const [error, setError] = useState(false);
 
-  const handleShowMore = async(e) => {
+  const handleShowMore = async (e) => {
     const index = posts.length;
     e.preventDefault();
-    try{
-      const res = await axios.get(`/api/post/getposts?userId=${currentUser._id}&startIndex=${index}`);
-      setPosts((prevPosts)=>[...prevPosts, ...res.data.posts]);
-      if(res.data.posts.length < 9){
+    try {
+      const res = await axios.get(
+        `/api/post/getposts?userId=${currentUser._id}&startIndex=${index}`
+      );
+      setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
+      if (res.data.posts.length < 9) {
         setShowMore(false);
       }
-    }catch(error){
+    } catch (error) {
       setError(true);
     }
-  }
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -31,10 +33,12 @@ const DashPosts = () => {
           `/api/post/getposts?userId=${currentUser._id}`
         );
         setPosts(res.data.posts);
-        if(res.data.posts.length < 9){
+        if (res.data.posts.length < 9) {
           setShowMore(false);
         }
-      } catch (error) {}
+      } catch (error) {
+        setError(true);
+      }
     };
     if (currentUser.isCreator) {
       fetch();
@@ -94,13 +98,20 @@ const DashPosts = () => {
               </Table.Body>
             ))}
           </Table>
-          {
-            showMore && <button onClick={handleShowMore} className="w-full self-center text-teal-500 py-2">
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="w-full self-center text-teal-500 py-2"
+            >
               Show More..
             </button>
-          }
+          )}
         </>
-      ) : error?(<span className='self-center text-red-700'><h1>Something went wrong!</h1></span>) : (
+      ) : error ? (
+        <span className="self-center text-red-700">
+          <h2>Something went wrong!</h2>
+        </span>
+      ) : (
         <p>You have no posts yet!</p>
       )}
     </div>

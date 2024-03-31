@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Table } from "flowbite-react";
+import { Table, Modal, Button } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const DashPosts = () => {
   const [posts, setPosts] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
   const [showMore, setShowMore] = useState(true);
   const [error, setError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [postId, setPostId] = useState("");
 
   const handleShowMore = async (e) => {
     const index = posts.length;
@@ -23,6 +27,21 @@ const DashPosts = () => {
       }
     } catch (error) {
       setError(true);
+    }
+  };
+
+  const handleDeletePost = async (e) => {
+    e.preventDefault();
+    setShowModal(false);
+    try {
+      const res = await axios.delete(
+        `/api/post/deletePosts/${postId}/${currentUser._id}`
+      );
+      setPosts((prevPost) => {
+        prevPost.filter((post) => post._id !== postId);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -60,7 +79,10 @@ const DashPosts = () => {
             </Table.Head>
             {posts.map((post) => (
               <Table.Body className="divide-y">
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Row
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  key={post._id}
+                >
                   <Table.Cell>
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </Table.Cell>
@@ -83,7 +105,13 @@ const DashPosts = () => {
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
-                    <span className="font-medium text-red-700 hover:underline cursor-pointer">
+                    <span
+                      className="font-medium text-red-700 hover:underline cursor-pointer"
+                      onClick={() => {
+                        setPostId(post._id);
+                        setShowModal(true);
+                      }}
+                    >
                       Delete
                     </span>
                   </Table.Cell>
@@ -114,6 +142,46 @@ const DashPosts = () => {
       ) : (
         <p>You have no posts yet!</p>
       )}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="h-14 w-14 text-red-500 dark:text-red-700 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this post?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button
+                gradientDuoTone="purpleToBlue"
+                outline
+                onClick={handleDeletePost}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="pl-3">Deleting...</span>
+                  </>
+                ) : (
+                  "Yes, I'm sure"
+                )}
+              </Button>
+
+              <Button
+                gradientDuoTone="greenToBlue"
+                onClick={() => setShowModal(false)}
+              >
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

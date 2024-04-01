@@ -14,6 +14,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
 import PrivateRouteCreator from "./components/PrivateRouteCreator";
 import CreatePost from "./pages/CreatePost";
+import UpdatePost from "./pages/UpdatePost";
 
 const App = () => {
 
@@ -30,6 +31,7 @@ const App = () => {
         </Route>
         <Route element={<PrivateRouteCreator />}>
           <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />

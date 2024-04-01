@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import PrivateRouteCreator from "./components/PrivateRouteCreator";
 import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
+import Post from "./pages/Post";
 
 const App = () => {
 
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/post/:postSlug" element={<Post />} />
       </Routes>
       <ToastContainer
         position="top-center"

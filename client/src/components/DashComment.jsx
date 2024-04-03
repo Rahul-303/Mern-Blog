@@ -25,7 +25,7 @@ const DashComment = () => {
         console.log(error);
       }
     };
-    if (currentUser.isCreator) {
+    if (currentUser) {
       fetchComments();
     }
   }, [currentUser._id]);
@@ -37,7 +37,10 @@ const DashComment = () => {
         `/api/comment/getComments?startIndex=${startIndex}`
       );
       setComments((prevComments) => [...prevComments, ...res.data.comments]);
-      if (res.data.comments.length < 9) {
+      console.log(res.data);
+        setComments([...comments, ...res.data.comments]);
+
+      if (res.data.comments.length <= 9) {
         setShowMore(false);
       }
     } catch (error) {
@@ -66,7 +69,7 @@ const DashComment = () => {
   };
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      {currentUser.isCreator && comments.length > 0 ? (
+      {currentUser && comments.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">
             <Table.Head>

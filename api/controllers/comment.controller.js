@@ -10,7 +10,6 @@ export const createComment = async (req, res, next) => {
         errorHandler(403, "You are not allowed to create this comment")
       );
     }
-
     const newComment = new Comment({
       content,
       postId,
@@ -57,14 +56,11 @@ export const likeComment = async (req, res, next) => {
 };
 
 export const getComments = async (req, res, next) => {
-  if (!req.user.isCreator) {
-    return next(errorHandler(403, "cannot retrieve data"));
-  }
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.sort === "desc" ? -1 : 1;
-    const comments = await Comment.find()
+    const comments = await Comment.find({userId: req.user.id})
       .sort({ createdAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
@@ -80,7 +76,7 @@ export const getComments = async (req, res, next) => {
     const lastMonthComments = await Comment.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
-
+ 
     res.status(200).json({ comments, totalComments, lastMonthComments });
   } catch (error) {
     next(error);

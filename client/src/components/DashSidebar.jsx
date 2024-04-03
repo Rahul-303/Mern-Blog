@@ -72,8 +72,6 @@ const DashSidebar = () => {
             </Link>
             )
           }
-           {
-            currentUser.isCreator && (
               <Link to="/dashboard?tab=comments">
               <Sidebar.Item
                 active={tab === "comments"}
@@ -83,8 +81,7 @@ const DashSidebar = () => {
                 Comments
               </Sidebar.Item>
             </Link>
-            )
-          }
+          
           <Sidebar.Item icon={HiArrowRight} className="cursor-pointer" onClick ={handleSignOut}>
             Sign out
           </Sidebar.Item>

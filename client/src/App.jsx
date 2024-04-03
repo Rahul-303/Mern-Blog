@@ -16,6 +16,7 @@ import PrivateRouteCreator from "./components/PrivateRouteCreator";
 import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
 import Post from "./pages/Post";
+import GoToTop from "./components/GoToTop";
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+    <GoToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

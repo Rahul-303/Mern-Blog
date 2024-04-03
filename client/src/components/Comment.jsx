@@ -1,13 +1,15 @@
 import { Button, Textarea } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import SingleComment from "./SingleComment";
 
 const Comment = (props) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [error, setError] = useState(null);
+  const [comments , setComments] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +30,24 @@ const Comment = (props) => {
       const res = await axios.post(`/api/comment/create`, commentData, config);
       setComment("");
       setError(null);
+      setComments([res.data, ...comments])
     } catch (error) {
       setError(error.response.data.message);
     }
   };
+
+  useEffect(()=>{
+    const getComments = async() =>{
+      try{
+        const res = await axios.get(`/api/comment/getPostComment/${props.postId}`);
+        console.log(res.data);
+        setComments(res.data);
+      }catch(error){
+        console.log(error);
+      }
+    }
+    getComments();
+  }, [props.postId])
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -77,9 +93,24 @@ const Comment = (props) => {
               Submit
             </Button>
           </div>
+          {error && <span className=" text-red-700">{error}</span>}
         </form>
       )}
-      {error && <span className=" text-red-700">{error}</span>}
+      {comments.length === 0 ? (
+        <p className="text-sm my-5"> no commenst yet!</p>
+      ) : (
+        <>
+        <div className="text-sm my-5 flex items-center gap-1">
+          <p>Comments</p>
+          <div className="border border-gray-400 py-1 px-2 rounded-sm">{comments.length}</div>
+        </div>
+        {comments.map(comment => (
+          <SingleComment key={comment._id} comment={comment}/>
+        ))}
+        </>
+        
+
+      )}
     </div>
   );
 };

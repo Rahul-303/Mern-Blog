@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Sidebar } from "flowbite-react";
-import { HiArrowRight, HiArrowSmRight, HiDocument, HiUser } from "react-icons/hi";
+import { HiAnnotation, HiArrowRight, HiArrowSmRight, HiDocument, HiUser } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -55,6 +55,19 @@ const DashSidebar = () => {
                 as='div'
               >
                 Posts
+              </Sidebar.Item>
+            </Link>
+            )
+          }
+           {
+            currentUser.isCreator && (
+              <Link to="/dashboard?tab=comments">
+              <Sidebar.Item
+                active={tab === "comments"}
+                icon={HiAnnotation}
+                as='div'
+              >
+                Comments
               </Sidebar.Item>
             </Link>
             )

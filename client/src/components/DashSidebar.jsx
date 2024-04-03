@@ -48,6 +48,19 @@ const DashSidebar = () => {
           </Link>
           {
             currentUser.isCreator && (
+              <Link to="/dashboard?tab=dash">
+              <Sidebar.Item
+                active={tab === "dash"}
+                icon={HiAnnotation}
+                as='div'
+              >
+                Dashboard
+              </Sidebar.Item>
+            </Link>
+            )
+          }
+          {
+            currentUser.isCreator && (
               <Link to="/dashboard?tab=posts">
               <Sidebar.Item
                 active={tab === "posts"}

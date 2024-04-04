@@ -65,7 +65,7 @@ export const getComments = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-    const totalComments = await Comment.countDocuments();
+    const totalComments = await Comment.countDocuments({userId: req.user.id});
     const now = new Date();
     const oneMonthAgo = new Date(
       now.getFullYear(),
@@ -74,6 +74,7 @@ export const getComments = async (req, res, next) => {
     );
 
     const lastMonthComments = await Comment.countDocuments({
+      userId: req.user.id,
       createdAt: { $gte: oneMonthAgo },
     });
  

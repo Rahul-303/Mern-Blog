@@ -82,7 +82,7 @@ const CreatePost = () => {
       const res = await axios.post("/api/post/create", formData, config);
       console.log(res);
       setLoading(false);
-      navigate(`/post/${res.data.slug}`);
+      navigate(`/post/${res.data._id}`);
     } catch (error) {
       setPublishError(error.response.data.message);
       setLoading(false);
@@ -99,6 +99,16 @@ const CreatePost = () => {
             placeholder="Title"
             required
             id="title"
+            className="flex-1"
+            onChange={(e) =>
+              setFormData({ ...formData, [e.target.id]: e.target.value })
+            }
+          />
+           <TextInput
+            type="text"
+            placeholder="Description"
+            required
+            id="description"
             className="flex-1"
             onChange={(e) =>
               setFormData({ ...formData, [e.target.id]: e.target.value })

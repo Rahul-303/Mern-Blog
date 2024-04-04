@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import Comment from '../components/Comment';
 
 const Post = () => {
-    const {postSlug} = useParams();
+    const {postId} = useParams();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [post, setPost] = useState(null);
@@ -13,7 +13,7 @@ const Post = () => {
         const fetchPost = async () => {
             try{
                 setLoading(true);
-                const res = await axios.get(`/api/post/getposts?slug=${postSlug}`)
+                const res = await axios.get(`/api/post/getposts?postId=${postId}`)
                 setPost(res.data.posts[0]);
                 setLoading(false);
             }catch(error){
@@ -22,7 +22,7 @@ const Post = () => {
             }
         }
         fetchPost();
-    },[postSlug])
+    },[postId])
 
     if(loading) return <div className='flex justify-center items-center min-h-screen'>
         <Spinner size='xl'/>

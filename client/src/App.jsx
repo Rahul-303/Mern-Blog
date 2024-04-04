@@ -39,7 +39,7 @@ const App = () => {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/post/:postSlug" element={<Post />} />
+        <Route path="/post/:postId" element={<Post />} />
       </Routes>
       <ToastContainer
         position="top-center"

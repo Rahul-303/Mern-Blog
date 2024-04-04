@@ -17,6 +17,7 @@ import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
 import Post from "./pages/Post";
 import GoToTop from "./components/GoToTop";
+import Search from "./pages/Search";
 
 const App = () => {
 
@@ -38,6 +39,7 @@ const App = () => {
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/post/:postId" element={<Post />} />
       </Routes>

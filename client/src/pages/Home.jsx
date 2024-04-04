@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import PostCard from "../components/PostCard";
+import { Button } from "flowbite-react";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -18,6 +19,10 @@ const Home = () => {
     };
     fetchPosts();
   }, []);
+
+  const handleCreator = () =>{
+
+  }
   return (
     <>
     <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto '>
@@ -26,12 +31,18 @@ const Home = () => {
           Here you'll find a variety of articles and tutorials on topics such as
           web development, software engineering, and programming languages.
         </p>
+        
         <Link
           to='/search'
           className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'
         >
           View all posts
         </Link>
+        <p className="text-xl font-bold lg:text-3xl">want to share you knowledge?</p>
+        <p className="text-md sm:text-sm text-blue-500 font-bold hover:underline cursor-pointer" onClick={handleCreator}>join as a creator now!</p>
+      </div>
+      <div className="text-center gap-6 ">
+      
       </div>
       <div className="ml-10 mr-10">
         {posts && posts.length > 0 && (

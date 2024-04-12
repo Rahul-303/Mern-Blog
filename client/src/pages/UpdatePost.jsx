@@ -124,6 +124,16 @@ import { useSelector } from "react-redux";
               }
               value={formData.title}
             />
+            <TextInput
+              type="text"
+              placeholder="Description"
+              id="description"
+              className="flex-1"
+              onChange={(e) =>
+                setFormData({ ...formData, [e.target.id]: e.target.value })
+              }
+              value={formData.description}
+            />
             <Select
               id="category"
               value={formData.category}

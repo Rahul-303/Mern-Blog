@@ -1,7 +1,7 @@
 {
   "name": "blog-mern",
   "version": "1.0.0",
-  "description": "",
+  "description": "simple blog app",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "start": "node api/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rahul Kumar Singh",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -39,3 +39,8 @@ body{
 .dark .post_content a{
     color: rgb(75, 94, 202);
 }
+
+.quill > .ql-container > .ql-editor.ql-blank::before{
+    font-size: 20px;
+    color: gray;
+}
